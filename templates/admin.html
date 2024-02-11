@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pannello Admin - Recensioni di Prodotti Amazon</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .jumbotron {
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-primary {
+      animation: flicker 4s infinite;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    .jumbotron h1, .jumbotron p {
+      animation: slideInLeft 2s forwards;
+      opacity: 0;
+    }
+
+     /* Aggiungi uno stile personalizzato per il menu a tendina */
+    .dropdown-menu-right {
+    right: 0;
+    left: auto;  /* Assicurati che il menu si apra verso sinistra */
+   } 
+    @keyframes slideInLeft {
+      0% { transform: translateX(-100px); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Recensioni Amazon - Admin</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarSettingsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Impostazioni
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarSettingsDropdown">
+            <!-- Elementi del menu a tendina -->
+  <a class="dropdown-item" href="/gestionerecensioni">Gestione Recensioni</a>
+              <a class="dropdown-item" href="/gestionearticoli">Gestione Articoli</a>
+              <a class="dropdown-item" href="/impostazionisito">Impostazioni Sito</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  
+
+  <!-- Contenuto specifico per Admin -->
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Numero Recensioni</h5>
+            <p class="card-text">XXX recensioni totali</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Articoli Recensiti</h5>
+            <p class="card-text">XXX articoli recensiti</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Utenti Attivi</h5>
+            <p class="card-text">XXX utenti attivi questo mese</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container mt-5">
+    <h2>Impostazioni del Sito</h2>
+    <form method="post" action="/update_settings"> <!-- Aggiungi l'endpoint appropriato -->
+      <div class="form-group">
+        <label for="aiModelSelect">Seleziona Modello di AI:</label>
+        <select class="form-control" id="aiModelSelect" name="ai_model">
+          <option value="model1">Modello AI 1</option>
+          <option value="model2">Modello AI 2</option>
+          <!-- Altri modelli di AI -->
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Salva Impostazioni</button>
+    </form>
+  </div>
+  
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

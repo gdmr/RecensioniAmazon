@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+.emoji {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    font-size: 3rem;
+}
+.tooltip-icon {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    padding: 0 5px;
+    border: 1px solid #888;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.tooltip-text {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    border: 1px solid #888;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.tooltip-icon:hover .tooltip-text {
+    display: block;
+}
+  </style>
+ 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Info dettagliate</title>
+  <!-- Includi i file CSS di Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+ <!-- Barra di navigazione -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/">Recensioni Amazon</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link active" href="/">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/articoli">Articoli</a>
+      </li>
+      {% if session.logged_in %}
+      <li class="nav-item">
+        <a class="nav-link" href="/scrivirecensione">Lascia una recensione</a>
+      </li>
+      {% endif %}
+      {% if not session.logged_in %}
+      <li class="nav-item">
+        <a class="nav-link" href="/loginpage">Accedi</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/registrati">Registrati</a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">Logout</a>
+      </li>
+      {% endif %}
+      <li class="nav-item">
+        <a class="nav-link" href="/contattaci">Contattaci</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+  <!-- Contenuto principale -->
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>INFO DETTAGLIATE ARTICOLO</h1>
+        <p>Qui puoi trovare le informazioni dettagliate sull'articolo che desideri conoscere.</p>
+        <h2>Votazione</h2>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+              
+                <th>Caratteristica</th>
+                <th>Voto</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Media recensioni amazon.it <span class="tooltip-icon">?
+                  <span class="tooltip-text"> Media visualizzata da Amazon.it</span>
+              </span> </td>
+                <td>{{ dati[0].mediaamazon }}</td>
+              </tr>
+
+              <tr>
+                <td>Media recensioni RA® <span class="tooltip-icon">?
+                  <span class="tooltip-text"> Media matematica delle recensioni Amazon.it</span>
+              </span> </td>
+                <td>{{ dati[0].mediasito }} su 5 stelle</td>
+              </tr>
+             
+              <tr>
+                <td>Media recensioni verificate RA® 
+                  <span class="tooltip-icon">?
+                    <span class="tooltip-text"> Media delle <b>sole</b> recensioni su questo portale</span>
+                </span></td>
+                <td>{{ dati[1].mioportale }} su 5 stelle</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+    
+
+
+
+
+        <h2>Affidabilità</h2>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Test</th>
+                <th>Risultato</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                
+                <td>Affidabilità recensioni verificate RA® <span class="tooltip-icon">?
+                  <span class="tooltip-text">Risultato della verifica tramite l'ia</span>
+              </span></td>
+            </td>
+                <td>{{ dati[1].fake}}%   </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    {% if extra != Null %}
+    <h2>Extra</h2>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+          
+            <th>Caratteristiche</th>
+            <th>Voto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Sostenibilità</td>
+            <td> DA IMPLEMENTARE</td>
+          </tr>
+        
+        </tbody>
+      </table>
+    </div>
+   {% endif %}
+
+    <h2>HelpBot</h2>
+        <p>Se hai domande specifiche sul prodotto puoi parlare con il nostro helpBot</p>
+        <div class="container mt-5">
+          <div class="row justify-content-center">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-header">
+                  <h4>HELPBOT</h4>
+                </div>
+                <div class="card-body">
+                  <div id="chat-container"></div>
+                  <form id="chat-form" method="post" action="/ask">
+                    <div class="form-group">
+                      <input type="text" class="form-control" id="user-input" placeholder="Digita un messaggio">
+                      <input hidden type="text" id="doc" value="{{dati[2].data}}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Invia</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+  <!-- Includi i file JavaScript di Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script>
+    $(function() {
+      $('#chat-form').on('submit', function(event) {
+        event.preventDefault();
+        var userInput = $('#user-input').val();
+        var otherParam = $('#doc').val();
+        $.ajax({
+          url: '/ask',
+          method: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({ message: userInput,
+            doc: otherParam}),
+          success: function(data) {
+        var text = data.generated_text;
+        $('#chat-container').append('<p>' + text + '</p>');
+        $('#user-input').val(''); }
+        });
+      });
+    });
+    </script>
+</body>
+</html>

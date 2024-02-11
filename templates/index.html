@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recensioni Amazon</title>
+  <!-- Includi i file CSS di Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .jumbotron {
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    }
+    </style>
+    <style>
+      .btn-primary {
+        animation: flicker 4s infinite;
+      }
+      
+      @keyframes flicker {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+      }
+      </style>
+      <style>
+        .jumbotron h1, .jumbotron p {
+          animation: slideInLeft 2s forwards;
+          opacity: 0;
+        }
+        
+        @keyframes slideInLeft {
+          0% { transform: translateX(-100px); opacity: 0; }
+          100% { transform: translateX(0); opacity: 1; }
+        }
+
+        .search-container {
+          margin-top: 20px;
+         margin-bottom: 20px;
+        }
+
+        </style>
+        
+</head>
+<body>
+  <!-- Barra di navigazione -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/">Recensioni Amazon</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link active" href="/">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/articoli">Articoli</a>
+      </li>
+      {% if session.logged_in %}
+      <li class="nav-item">
+        <a class="nav-link" href="/scrivirecensione">Lascia una recensione</a>
+      </li>
+      {% endif %}
+      {% if not session.logged_in %}
+      <li class="nav-item">
+        <a class="nav-link" href="/loginpage">Accedi</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/registrati">Registrati</a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">Logout</a>
+      </li>
+      {% endif %}
+      <li class="nav-item">
+        <a class="nav-link" href="/contattaci">Contattaci</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+ <!-- Messaggi flash -->
+ <div class="container mt-5">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert" id="flash-msg">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+
+  <!-- Contenuto principale -->
+  <div class="container mt-5">
+    <div class="jumbotron">
+      <h1 class="display-4">Benvenuto!</h1>
+      <p class="lead">Sfrutta tutta la potenza dell'IA per ottenere consigli sugli acquisti online.</p>
+      <hr class="my-4">
+      <p>Esplora le percezioni degli altri sugli articoli di tuo interesse e arricchisci la community con le tue valutazioni personali.</p>
+      <a class="btn btn-primary btn-lg" href="/articoli" role="button">Scopri gli articoli</a>
+      <a class="btn btn-primary btn-lg" href="/cercarandom" role="button">Lasciati consigliare</a>
+    </div>
+  </div>
+
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

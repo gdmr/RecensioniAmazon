@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrati - Recensioni di Prodotti Amazon</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+<script>// Carica il CAPTCHA all'apertura della pagina
+  window.onload = function() {
+      loadCaptcha();
+  }
+  
+  function loadCaptcha() {
+      fetch('/get_captcha')
+          .then(response => response.json())
+          .then(data => {
+              document.getElementById('captcha-image').src = data.image;
+              const wordsContainer = document.getElementById('captcha-words-container');
+              wordsContainer.innerHTML = ''; // Pulisci i contenuti precedenti
+  
+              data.words.forEach(word => {
+                  const wordDiv = document.createElement('div');
+                  wordDiv.innerText = word;
+                  wordDiv.className = 'draggable-word';
+                  wordDiv.draggable = true;
+                  wordDiv.ondragstart = drag;
+                  wordsContainer.appendChild(wordDiv);
+              });
+          });
+           // Svuota il campo di testo CAPTCHA
+           document.getElementById('captcha-response').innerText = '';
+  }
+  
+  function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.innerText);
+  }
+  
+  function allowDrop(ev) {
+      ev.preventDefault();
+  }
+  
+  function drop(ev) {
+      ev.preventDefault();
+      var data = ev.dataTransfer.getData("text");
+      ev.target.appendChild(document.createTextNode(data + ' '));
+  }
+  
+  function verifyCaptcha() {
+    const userResponse = document.getElementById('captcha-response').innerText.trim();
+    const imagePath = document.getElementById('captcha-image').src;
+
+    // Imposta i valori dei campi nascosti
+    document.getElementById('hidden-captcha-response').value = userResponse;
+    document.getElementById('hidden-captcha-image-path').value = imagePath;
+
+   
+}
+
+function setCAPTCHAValues() {
+    const userResponse = document.getElementById('captcha-response').innerText.trim();
+    const imagePath = document.getElementById('captcha-image').src;
+
+    document.getElementById('hidden-captcha-response').value = userResponse;
+    document.getElementById('hidden-captcha-image-path').value = imagePath;
+}
+
+
+  </script>
+  
+  <!-- Barra di navigazione -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Recensioni Amazon</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/articoli">Articoli</a>
+        </li>
+        {% if session.logged_in %}
+        <li class="nav-item">
+          <a class="nav-link" href="/scrivirecensione">Lascia una recensione</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="/loginpage">Accedi</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="">Registrati</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contattaci">Contattaci</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+   <!-- Messaggi flash -->
+ <div class="container mt-5">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert" id="flash-msg">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+
+
+<!-- Contenuto principale -->
+<div class="container mt-5">
+  <div class="row">
+      <div class="col-md-6 offset-md-3">
+          <h1 class="text-center">Registrati</h1>
+          <form method="POST" action="{{ url_for('controller.register') }}">
+          <div class="form-group">
+            <label for="username">Nome utente</label>
+            <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome utente">
+          </div>
+          <div class="form-group">
+            <label for="email">Indirizzo email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="nome@esempio.com">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <label for="passwordConfirm">Conferma password</label>
+            <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm"  placeholder="Conferma password">
+          </div>
+          <div class="form-group">
+            <label for="">Conferma di essere umano</label>
+          </div>
+<!-- Sezione CAPTCHA -->
+<div class="form-group d-flex align-items-center">
+  <!-- Contenitore per l'immagine del CAPTCHA e il pulsante di aggiornamento -->
+  <div class="d-flex align-items-center mr-3">
+    
+      <img id="captcha-image" src="" alt="CAPTCHA Image" style="max-height: 100px;">
+
+      <!-- Pulsante per aggiornare il CAPTCHA -->
+      <button type="button" class="btn btn-secondary ml-2" onclick="loadCaptcha()">
+          <i class="fas fa-sync-alt"></i>
+      </button>
+  </div>
+
+  <!-- Contenitore per le parole trascinabili del CAPTCHA -->
+  <div id="captcha-words-container" class="d-flex flex-wrap">
+      <!-- Le parole del CAPTCHA saranno inserite qui -->
+  </div>
+</div>
+
+<div id="captcha-response" ondrop="drop(event)" ondragover="allowDrop(event)" class="border p-2">
+  <!-- Le parole trascinate saranno rilasciate qui -->
+</div>
+<!-- Div per mostrare il messaggio del CAPTCHA -->
+<div class="form-group">
+  <div id="captcha-message" class="text-center"></div>
+</div>
+  <!-- Campo nascosto per la risposta del CAPTCHA -->
+  <input type="hidden" id="hidden-captcha-response" name="captcha_response" value="">
+
+  <!-- Campo nascosto per il percorso dell'immagine del CAPTCHA -->
+  <input type="hidden" id="hidden-captcha-image-path" name="captcha_image_path" value="">
+<!-- Bottoni -->
+<div class="form-group">
+  <button type="submit" class="btn btn-primary" onclick="setCAPTCHAValues()">Registrati</button>
+</div>
+    </form>
+</div>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ 
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Articoli</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .custom-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .custom-button:hover {
+      background-color: #0056b3;
+    }
+     .category-button {
+      width: 100px; /* Larghezza del bottone */
+      height: 100px; /* Altezza del bottone */
+      background-size: cover; /* Fa in modo che l'immagine di sfondo copra l'intera area del bottone */
+      border: none;
+      border-radius: 0; /* Rende i bordi quadrati */
+      padding: 0; /* Rimuove il padding */
+    }
+  </style>
+</head>
+<body>
+  <!-- Barra di navigazione -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Recensioni Amazon</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/articoli">Articoli</a>
+        </li>
+        {% if session.logged_in %}
+        <li class="nav-item">
+          <a class="nav-link" href="/scrivirecensione">Lascia una recensione</a>
+        </li>
+        {% endif %}
+        {% if not session.logged_in %}
+        <li class="nav-item">
+          <a class="nav-link" href="/loginpage">Accedi</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/registrati">Registrati</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="/contattaci">Contattaci</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-12">
+        <form action="/articolicerca" method="GET">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Cerca articoli..." name="q">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="submit">Cerca</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  <div class="container mt-5">
+    <div class="container mt-5">
+      
+
+        <h1>Articoli</h1>
+    
+        {% if articoli %}
+  {% for articolo in articoli %}
+    <div class="card mt-4">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <!-- Aggiunto width e height in stile -->
+          <img src="{{ articolo.url_img }}" class="img-fluid" alt="{{ articolo.nomeart }}">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">{{ articolo.nomeart }}</h5>
+            <div class="btn-group">
+              <form action="{{ url_for('controller.vedisuamazon') }}" method="GET">
+                <input hidden type="number" name="articolo_id" value="{{ articolo.id }}">
+                <button type="submit" class="custom-button btn-sm">Vedi su Amazon</button>
+              </form>
+              <form action="{{ url_for('controller.dettagli') }}" method="GET">
+                <input hidden type="number" name="id" value="{{ articolo.id }}">
+                <button type="submit" class="custom-button btn-sm">Info dettagliate</button>
+              </form>
+              <form action="{{ url_for('controller.recensionearticolo') }}" method="GET">
+                <input hidden type="number" name="articolo_id" value="{{ articolo.id }}">
+                <button type="submit" class="custom-button btn-sm">Leggi recensioni</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <p class=" mt-4"><h3>Non sono presenti recensioni.</h3></p>
+{% endif %}
+      </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

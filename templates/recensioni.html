@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recensioni di Prodotti Amazon</title>
+  <!-- Includi i file CSS di Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Stile personalizzato per i bottoni */
+    .custom-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .custom-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <!-- Barra di navigazione -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Recensioni Amazon</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/articoli">Articoli</a>
+        </li>
+        {% if session.logged_in %}
+      <li class="nav-item">
+        <a class="nav-link" href="/scrivirecensione">Lascia una recensione</a>
+      </li>
+      {% endif %}
+        {% if not session.logged_in %}
+        <li class="nav-item">
+          <a class="nav-link" href="/loginpage">Accedi</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/registrati">Registrati</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="contattaci">Contattaci</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Contenuto principale -->
+  <div class="container mt-5">
+    <h1>Recensioni</h1>
+
+    <!-- Simulazione di recensioni. In pratica, queste dovrebbero essere generate dinamicamente con un linguaggio lato server come PHP, Node.js, ecc. -->
+    {% if recensioni %}
+      {% for recensione in recensioni %}
+        <div class="card mt-4">
+          <td>{{ recensione.nome }}</td>
+          <h2>{{ recensione.titolo }}</h2>
+          <p>{{ recensione.info }}</p>
+          <!--
+          <div class="btn-group">
+            <button class="custom-button btn-sm">Info dettagliate</button>
+          </div> -->
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class=" mt-4"><h3>Non sono presenti recensioni.</h3></p>
+    {% endif %}
+
+    <!-- e così via per altre recensioni... -->
+  </div>
+
+  <!-- Includi i file JavaScript di Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
