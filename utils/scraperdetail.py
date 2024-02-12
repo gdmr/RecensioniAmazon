@@ -33,13 +33,11 @@ def scrape_product_details(url: str):
             captcha_url = captcha_img.get_attribute("src")
             # Ottieni il percorso assoluto del file del tuo script Python
             script_dir = os.path.dirname(os.path.abspath(__file__))
-            print("script dir ", script_dir)
             # Costruisci il percorso relativo al file "model.pth"
             model_path = os.path.join(script_dir, "model15.pth")
             print("model path ", model_path)
             # Utilizza il percorso relativo nella tua funzione
             solution = solve_captcha(model_path, captcha_url)
-            #solution = solve_captcha("/Users/gionata/Desktop/gpt4a/model.pth", image_path)
             print("solutin", solution)
             captcha_input_selector = '#captchacharacters'
             page.fill(captcha_input_selector, solution)

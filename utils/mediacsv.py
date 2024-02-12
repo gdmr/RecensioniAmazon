@@ -21,8 +21,4 @@ with open('tuo_file.csv', newline='', encoding='utf-8') as file:
         # Incrementa il numero di recensioni
         numero_recensioni += 1
 
-# Calcola la media arrotondata verso il basso
-media_arrotondata = int(somma_punteggi / numero_recensioni)
 
-# Stampala
-print(f"La media arrotondata verso il basso dei punteggi delle recensioni è: {media_arrotondata}")

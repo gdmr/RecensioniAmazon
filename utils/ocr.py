@@ -4,7 +4,6 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
-#from dataset import Dataset
 from utils.crnn import CRNN
 
 class OCR:

@@ -188,14 +188,9 @@ def dettagli():
 @controller.route("/ask", methods=["POST"])
 def ask():
     data = request.get_json(force=True)
-    print("data", data)
     question = data.get("message", "")
-    print("question", question)
     aggiunta = data.get("doc", "")
-    print("aggiunta", aggiunta)
     trovaqui = aggiunta
-    print("TROVA QUII------->>>>>>>>>>")
-    print(trovaqui)
     if question:
         response = chat_model(trovaqui,question)
         return jsonify({"generated_text": response})

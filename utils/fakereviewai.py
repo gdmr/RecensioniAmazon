@@ -14,15 +14,13 @@ def calcola_percentuale_veri(file_csv):
         # Prendi le recensioni
         recensioni = df['review_text'].tolist()[:11]
 
-        model = AutoModelForSequenceClassification.from_pretrained("Sarwar242/autotrain-fake-reviews-labelling-37433101195", token="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")
-        tokenizer = AutoTokenizer.from_pretrained("Sarwar242/autotrain-fake-reviews-labelling-37433101195", token="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")
-        print("tokenizer")
+        model = AutoModelForSequenceClassification.from_pretrained("Sarwar242/autotrain-fake-reviews-labelling-37433101195", token="INSERIRE LA PROPRIA APIKEY")
+        tokenizer = AutoTokenizer.from_pretrained("Sarwar242/autotrain-fake-reviews-labelling-37433101195", token="INSERIRE LA PROPRIA APIKEY")
         # Trasforma le recensioni in input per il modello
         inputs = tokenizer(recensioni, return_tensors="pt", padding=True, truncation=True, max_length=512)
 
         # Ottieni l'output del modello
         outputs = model(**inputs)
-        print("output")
         # Prendi i logits dal tuo output
         logits = outputs.logits
 
